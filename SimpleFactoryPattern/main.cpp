@@ -58,10 +58,40 @@ public:
 	}
 };
 
+class OperationFactory
+{
+public:
+	static COperation* createOperation(char operatorC)
+	{
+		COperation* oper = NULL;
+		switch (operatorC)
+		{
+		case '+':
+			oper = new COperationAdd();
+			break;
+		case '-':
+			oper = new COperationSub();
+			break;
+		case '*':
+			oper = new COperationMul();
+			break;
+		case '/':
+			oper = new COperationDiv();
+			break;
+		}
+		return oper;
+	}
+};
+
 int main()
 {
 	//split calculation process and display process.
 	//inherit Operation class and split different calculation classes.
+	//implement Simple Factory Pattern.
+	/*brief definition of Simple Factory Pattern:
+	In simple Factory Pattern, we have a factory class which has a method
+	that returns different types of object based on given input.
+	*/
 	double a = 0.0f, b = 0.0f;
 	char c;
 	cout << "please enter number A:";
@@ -73,30 +103,11 @@ int main()
 	cout << "please enter number B:";
 	cin >> b;
 	cout << endl;
-	COperationAdd myOAdd;
-	COperationSub myOSub;
-	COperationMul myOMul;
-	COperationDiv myODiv;
 
-	COperationAdd* pmyOAdd = new COperationAdd(2);
-	switch (c)
-	{
-	case '+':
-		/*cout << pmyOAdd->GetResult(a, b, c) << endl;
-		*/
-		cout << myOAdd.GetResult(a,b,c) << endl;
-		break;
-	case '-':
-		cout << myOSub.GetResult(a, b, c) << endl;
-		break;
-	case '*':
-		cout << myOMul.GetResult(a, b, c) << endl;
-		break;
-	case '/':
-		cout << myODiv.GetResult(a, b, c) << endl;
-		break;
-	}
-	
+	COperation *oper= OperationFactory::createOperation(c);
+	cout << oper->GetResult(a, b, c) << endl;
+	delete oper;
+	oper = NULL;
 
 	return system("pause");
 }
