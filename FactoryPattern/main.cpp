@@ -21,19 +21,44 @@ class Undergraduate :public LeiFeng
 {
 
 };
+class Volunteer :public LeiFeng
+{
+
+};
+
+class SimpleFactory
+{
+public:
+	static LeiFeng* CreateLeiFeng(int type) // must be static because of the pointer return type.
+	{
+		LeiFeng* result = NULL;
+		switch (type)
+		{
+		case 0:
+			result = new Undergraduate();
+			break;
+		case 1:
+			result = new Volunteer();
+			break;
+		}
+		return result;
+	}
+};
 int main()
 {
-	LeiFeng* student1 = new Undergraduate();
-	student1->BuyRice();
-	LeiFeng* student2 = new Undergraduate();
-	student2->Sweep();
-	LeiFeng* student3 = new Undergraduate();
-	student3->Wash();
-	delete student1;
-	delete student2;
-	delete student3;
-	student1 = NULL;
-	student2 = NULL;
-	student3 = NULL;
+	LeiFeng* studentA = SimpleFactory::CreateLeiFeng(0);
+	LeiFeng* studentB = SimpleFactory::CreateLeiFeng(0);
+	LeiFeng* studentC = SimpleFactory::CreateLeiFeng(0);
+
+	studentA->BuyRice();
+	studentB->Sweep();
+	studentC->Wash();
+	delete studentA;
+	delete studentB;
+	delete studentC;
+	studentA = NULL;
+	studentB = NULL;
+	studentC = NULL;
+
 	return system("pause");
 }
