@@ -2,9 +2,15 @@
 #include <string>
 
 using namespace::std;
-class Resume
+class ICloneable
 {
-private:
+public:
+	virtual ICloneable* Clone() = 0;
+};
+
+class Resume:public ICloneable
+{
+public:
 	string name;
 	string sex;
 	string age;
@@ -28,21 +34,29 @@ public:
 		cout << "Work Experience: " << timeArea << " " << company << endl;
 	}
 
+	Resume* Clone()
+	{
+		Resume* res = NULL;
+		res = new Resume(name);
+		res->setPersonalInfo(sex, age);
+		res->setWorkExperience(timeArea, company);
+		return res;
+	}
+
 };
 
 int main()
 {
+	//I could not see the advantage of prototype Pattern compared with copy-assignment constructor.
 	Resume* a = new Resume("Daliao");
 	a->setPersonalInfo("Male", "29");
 	a->setWorkExperience("1998-2000", "XX Company");
 
-	Resume* b = new Resume("Daliao");
-	b->setPersonalInfo("Male", "29");
-	b->setWorkExperience("1998-2000", "XX Company");
+	Resume* b =(Resume*) a->Clone();
+	b->setWorkExperience("1998-2006", "XX Enterprise");
 
-	Resume* c = new Resume("Daliao");
-	c->setPersonalInfo("Male", "29");
-	c->setWorkExperience("1998-2000", "XX Company");
+	Resume* c = (Resume*)a->Clone();
+	c->setPersonalInfo("Male", "26");
 
 	a->Display();
 	b->Display();
@@ -54,5 +68,6 @@ int main()
 	a = NULL;
 	b = NULL;
 	c = NULL;
+
 	return system("pause");
 }
