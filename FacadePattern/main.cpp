@@ -33,38 +33,61 @@ public:
 	void Buy() { cout << "Realty1 Buy" << endl; }
 };
 
+class Fund
+{
+private:
+	Stock1* gu1;
+	Stock2* gu2;
+	Stock3* gu3;
+	NationalDebt1* nd1;
+	Realty1* rt1;
+public:
+	Fund()
+	{
+		gu1 = new Stock1();
+		gu2 = new Stock2();
+		gu3 = new Stock3();
+		nd1 = new NationalDebt1();
+		rt1 = new Realty1();
+	}
+	void Buy()
+	{
+		gu1->Buy();
+		gu2->Buy();
+		gu3->Buy();
+		nd1->Buy();
+		rt1->Buy();
+	}
+	void Sell()
+	{
+		gu1->Sell();
+		gu2->Sell();
+		gu3->Sell();
+		nd1->Sell();
+		rt1->Sell();
+	}
+	~Fund()
+	{
+		delete gu1;
+		delete gu2;
+		delete gu3;
+		delete nd1;
+		delete rt1;
 
+		gu1 = NULL;
+		gu2 = NULL;
+		gu3 = NULL;
+		nd1 = NULL;
+		rt1 = NULL;
+	}
+};
 int main()
 {
-	Stock1* gu1 = new Stock1();
-	Stock2* gu2 = new Stock2();
-	Stock3* gu3 = new Stock3();
-	NationalDebt1* nd1 = new NationalDebt1();
-	Realty1* rt1 = new Realty1();
-
-	gu1->Buy();
-	gu2->Buy();
-	gu3->Buy();
-	nd1->Buy();
-	rt1->Buy();
-
-	gu1->Sell();
-	gu2->Sell();
-	gu3->Sell();
-	nd1->Sell();
-	rt1->Sell();
-
-	delete gu1;
-	delete gu2;
-	delete gu3;
-	delete nd1;
-	delete rt1;
-
-	gu1 = NULL;
-	gu2 = NULL;
-	gu3 = NULL;
-	nd1 = NULL;
-	rt1 = NULL;
+	{
+	Fund* jijin = new Fund();
+	jijin->Buy();
+	jijin->Sell();
+	}
 
 	return system("pause");
 }
