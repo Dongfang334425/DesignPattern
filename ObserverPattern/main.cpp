@@ -5,7 +5,16 @@
 using namespace::std;
 
 class Observer;
-class Secretary
+class Subject
+{
+public:
+	virtual void Attach(Observer* observer)=0;
+	virtual void Notify() = 0;
+	virtual string getSecretaryAction() = 0;
+	virtual void setSecretaryAction(string action) = 0;
+};
+
+class Secretary:public Subject
 {
 private:
 	list<Observer *> m_observers;
@@ -40,16 +49,16 @@ class Observer
 {
 protected:
 	string m_name;
-	Secretary *m_sub;
+	Subject *m_sub;
 public:
-	Observer(string name, Secretary *sub):m_name(name),m_sub(sub){}
+	Observer(string name, Subject *sub):m_name(name),m_sub(sub){}
 	virtual void Update() = 0;
 };
 
 class StockObserver :public Observer
 {
 public:
-	StockObserver(string name, Secretary* sub):Observer(name,sub){}
+	StockObserver(string name, Subject* sub):Observer(name,sub){}
 	void Update() override
 	{
 		cout << m_sub->getSecretaryAction() << " " << m_name << " Close Stock market, go to work!" << endl;
@@ -59,7 +68,7 @@ public:
 class NBAObserver :public Observer
 {
 public:
-	NBAObserver(string name, Secretary* sub):Observer(name,sub){}
+	NBAObserver(string name, Subject* sub):Observer(name,sub){}
 	void Update() override
 	{
 		cout << m_sub->getSecretaryAction() << " " << m_name << " Close NBA live, go to work!" << endl;
@@ -76,7 +85,7 @@ void Secretary::Notify()
 
 int main()
 {
-	Secretary* tongzhizhe = new Secretary();
+	Subject* tongzhizhe = new Secretary();
 	StockObserver* tongshi1 = new StockObserver("WeiGuanCha", tongzhizhe);
 	NBAObserver* tongshi2 = new NBAObserver("YiGuanCha", tongzhizhe);
 	
