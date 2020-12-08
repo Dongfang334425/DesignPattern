@@ -4,11 +4,11 @@
 
 using namespace::std;
 
-class StockObserver;
+class Observer;
 class Secretary
 {
 private:
-	list<StockObserver *> m_observers;
+	list<Observer *> m_observers;
 	string  m_action;
 public:
 
@@ -18,7 +18,7 @@ public:
 		m_action = "";
 	}
 
-	void Attach(StockObserver *observer)
+	void Attach(Observer *observer)
 	{
 		m_observers.push_back(observer);
 	}
@@ -36,19 +36,35 @@ public:
 	}
 };
 
-class StockObserver
+class Observer
 {
-private:
+protected:
 	string m_name;
 	Secretary *m_sub;
 public:
-	StockObserver(string name, Secretary *sub):m_name(name),m_sub(sub){}
-	void Update()
+	Observer(string name, Secretary *sub):m_name(name),m_sub(sub){}
+	virtual void Update() = 0;
+};
+
+class StockObserver :public Observer
+{
+public:
+	StockObserver(string name, Secretary* sub):Observer(name,sub){}
+	void Update() override
 	{
 		cout << m_sub->getSecretaryAction() << " " << m_name << " Close Stock market, go to work!" << endl;
 	}
 };
 
+class NBAObserver :public Observer
+{
+public:
+	NBAObserver(string name, Secretary* sub):Observer(name,sub){}
+	void Update() override
+	{
+		cout << m_sub->getSecretaryAction() << " " << m_name << " Close NBA live, go to work!" << endl;
+	}
+};
 
 void Secretary::Notify()
 {
@@ -62,8 +78,8 @@ int main()
 {
 	Secretary* tongzhizhe = new Secretary();
 	StockObserver* tongshi1 = new StockObserver("WeiGuanCha", tongzhizhe);
-	StockObserver* tongshi2 = new StockObserver("YiGuanCha", tongzhizhe);
-
+	NBAObserver* tongshi2 = new NBAObserver("YiGuanCha", tongzhizhe);
+	
 	tongzhizhe->Attach(tongshi1);
 	tongzhizhe->Attach(tongshi2);
 
