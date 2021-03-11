@@ -1,89 +1,99 @@
 #include <iostream>
+#include <vector>
+
 using namespace::std;
 
-class LeiFeng
+enum PRODUCTTYPE
+{
+	SFJ,
+	XSL,
+	NAS
+};
+
+class soapBase
 {
 public:
-	void Sweep()
-	{
-		cout << "Sweep" << endl;
-	}
-	void Wash()
-	{
-		cout << "Wash" << endl;
-	}
-	void BuyRice()
-	{
-		cout << "BuyRice" << endl;
-	}
-};
-class Undergraduate :public LeiFeng
-{
+	virtual ~soapBase()
+	{}
 
-};
-class Volunteer :public LeiFeng
-{
-
+	virtual void show() = 0;
 };
 
-class IFactory
+class SFJSoap :public soapBase
 {
 public:
-	virtual LeiFeng* CreateLeiFeng() = 0;
-};
-
-class UndergraduateFactory :public IFactory
-{
-public:
-	LeiFeng* CreateLeiFeng()
+	void show() { cout << "SFJ Soap!" << endl; }
+	~SFJSoap()
 	{
-		return new Undergraduate();
+		cout << "~SFJSoap" << endl;
 	}
 };
 
-class VolunteerFactory :public IFactory
+class XSLSoap :public soapBase
 {
 public:
-	LeiFeng* CreateLeiFeng()
+	void show() { cout << "XSL Soap!" << endl; }
+};
+
+class NASSoap :public soapBase
+{
+public:
+	void show() { cout << "NAS Soap!" << endl; }
+};
+
+//一个工厂生产一种产品。提供工厂抽象接口
+//简单工厂是一个工厂生产多种产品。通过switch 决定生产某种产品。
+class Factory
+{
+public:
+	virtual soapBase * createSoap() = 0;
+};
+
+class SFJFactory:public Factory
+{
+public:
+	soapBase* createSoap()
 	{
-		return new Volunteer();
+		return new SFJSoap();
 	}
 };
+
+class XSLFactory :public Factory
+{
+public:
+	soapBase* createSoap()
+	{
+		return new XSLSoap();
+	}
+};
+
+class NASFactory :public Factory
+{
+public:
+	soapBase* createSoap()
+	{
+		return new NASSoap();
+	}
+};
+
 int main()
 {
-	/*factory vs simple factory
-	if we want to change to 3 volunteers, we just need to change 
-	IFactory* factory = new UndergraduateFactory(); to
-	IFactory* factory = new VolunteerFactory();
-	pls ignore the name of studentA, studentB, studentC, pls we could 
-	make the name more common, such as personA, personB, personC.
-	But if we want to change to 3 volunteers using simple factory,
-	we need to change 
-	LeiFeng* studentA = SimpleFactory::CreateLeiFeng(0);
-	LeiFeng* studentB = SimpleFactory::CreateLeiFeng(0);
-	LeiFeng* studentc = SimpleFactory::CreateLeiFeng(0); (see the previous version)
-	to
-	LeiFeng* studentA = SimpleFactory::CreateLeiFeng(1);
-	LeiFeng* studentB = SimpleFactory::CreateLeiFeng(1);
-	LeiFeng* studentc = SimpleFactory::CreateLeiFeng(1);
-	3 lines need to be changed.
-	*/
-	IFactory* factory = new UndergraduateFactory();
-	LeiFeng* studentA = factory->CreateLeiFeng();
-	LeiFeng* studentB = factory->CreateLeiFeng();
-	LeiFeng* studentC = factory->CreateLeiFeng();
-	studentA->BuyRice();
-	studentB->Sweep();
-	studentC->Wash();
-	delete studentA;
-	delete studentB;
-	delete studentC;
-	studentA = NULL;
-	studentB = NULL;
-	studentC = NULL;
-	delete factory;
-	factory = NULL;
-	
+	SFJFactory factory1;
+	soapBase* pSoap1 = factory1.createSoap();
+	pSoap1->show();
+
+	XSLFactory factory2;
+	soapBase* pSoap2 = factory2.createSoap();
+	pSoap2->show();
+
+	NASFactory factory3;
+	soapBase* pSoap3 = factory3.createSoap();
+	pSoap3->show();
+
+	delete pSoap1;
+	delete pSoap2;
+	delete pSoap3;
+
 
 	return system("pause");
 }
